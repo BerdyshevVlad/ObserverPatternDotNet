@@ -7,15 +7,21 @@ namespace ObserverPattern
     {
         static void Main(string[] args)
         {
-            Publisher publisher = new Publisher();
-            Subscriber person1 = new Subscriber("Michale");
-            publisher.Attach(person1.GotArticle);
-            Subscriber person2 = new Subscriber("Jordon");
-            publisher.Attach(person2.GotArticle);
-            Observer observer = new Observer(publisher);
-            observer.AddNewArticle("Delegates in C#");
-            publisher.Remove(person2.GotArticle);
-            observer.AddNewArticle("Observer pattern");
+            // Издатель.
+            Subject subject = new ConcreteSubject();
+            // Подписчик, с сообщенным лямбда выражением.
+            Observer observer = new Observer(
+           (observerState) => Console.WriteLine(observerState + " 1"));
+            // Подписка на уведомление о событии.
+            subject.Event += observer;
+            subject.Event +=
+           (observerState) => Console.WriteLine(observerState + " 2");
+            subject.State = "State ...";
+            subject.Notify();
+            Console.WriteLine(new string('-', 11));
+            // Отписка от уведомлений.
+            subject.Event -= observer;
+            subject.Notify();
 
             Console.ReadLine();
         }

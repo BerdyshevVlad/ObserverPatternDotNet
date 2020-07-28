@@ -1,23 +1,17 @@
 ﻿namespace ObserverPattern.Entities
 {
-    public delegate void Notifier(string message);
-
-    //This is the class which keeps the list of all the subscribers with the help of the delegate instance.
-    public class Publisher
+    // Подписчик.
+    delegate void Observer(string state);
+    // Издатель.
+    abstract class Subject
     {
-        Notifier notifier;
-        public void Attach(Notifier notifier)
+        protected Observer observers = null;
+        public event Observer Event
         {
-            this.notifier += notifier;
+            add { observers += value; }
+            remove { observers -= value; }
         }
-        public void Remove(Notifier notifier)
-        {
-            this.notifier -= notifier;
-        }
-        public void SendMessgae(string message)
-        {
-            if (this.notifier != null)
-                notifier(message);
-        }
+        public abstract string State { get; set; }
+        public abstract void Notify();
     }
 }
