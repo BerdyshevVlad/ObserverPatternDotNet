@@ -1,50 +1,23 @@
-﻿using ObserverPattern.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-
-namespace ObserverPattern.Entities
+﻿namespace ObserverPattern.Entities
 {
-    public class Publisher : IPublisher
+    public delegate void Notifier(string message);
+
+    //This is the class which keeps the list of all the subscribers with the help of the delegate instance.
+    public class Publisher
     {
-        //Для удобства в этой переменной храниться состояние Издателя,
-        //необходимое всем подписчикам
-        public int State { get; set; } = -0;
-
-        //Список подписчиков
-        private List<IObserver> _observers = new List<IObserver>();
-
-        public void Attach(IObserver observer)
+        Notifier notifier;
+        public void Attach(Notifier notifier)
         {
-            _observers.Add(observer);
-            System.Console.WriteLine("Subject: Attached an observer");
+            this.notifier += notifier;
         }
-
-        public void Detach(IObserver observer)
+        public void Remove(Notifier notifier)
         {
-            _observers.Remove(observer);
-            System.Console.WriteLine("Subject: Dettached an observer");
+            this.notifier -= notifier;
         }
-
-        public void Notify()
+        public void SendMessgae(string message)
         {
-            foreach (var observer in _observers)
-            {
-                observer.Update(this);
-            }
-        }
-        
-        public void SomeBusinessLogic()
-        {
-            System.Console.WriteLine("I am doing some important thisng");
-
-            State = new Random().Next(0, 10);
-
-            Thread.Sleep(15);
-
-            Console.WriteLine($"Subject: My state has just changed to {State}");
-
-            this.Notify();
+            if (this.notifier != null)
+                notifier(message);
         }
     }
 }

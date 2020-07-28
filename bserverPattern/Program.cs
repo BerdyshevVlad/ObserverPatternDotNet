@@ -7,19 +7,15 @@ namespace ObserverPattern
     {
         static void Main(string[] args)
         {
-            var subject = new Publisher();
-            var observerA = new ConcreteObserverA();
-            subject.Attach(observerA);
-
-            var observerB = new ConcreteObserverB();
-            subject.Attach(observerB);
-
-            subject.SomeBusinessLogic();
-            subject.SomeBusinessLogic();
-
-            subject.Detach(observerB);
-
-            subject.SomeBusinessLogic();
+            Publisher publisher = new Publisher();
+            Subscriber person1 = new Subscriber("Michale");
+            publisher.Attach(person1.GotArticle);
+            Subscriber person2 = new Subscriber("Jordon");
+            publisher.Attach(person2.GotArticle);
+            Observer observer = new Observer(publisher);
+            observer.AddNewArticle("Delegates in C#");
+            publisher.Remove(person2.GotArticle);
+            observer.AddNewArticle("Observer pattern");
 
             Console.ReadLine();
         }
